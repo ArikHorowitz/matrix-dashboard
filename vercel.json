@@ -1,14 +1,4 @@
 {
-  "builds": [
-    {
-      "src": "frontend/index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "frontend/index.html"
-    }
-  ]
+  "framework": "nextjs",
+  "rootDirectory": "frontend"
 }
