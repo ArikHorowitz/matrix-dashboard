@@ -2,7 +2,7 @@ services:
   - type: web
     name: matrix-backend
     env: python
-    buildCommand: ""
+    buildCommand: "pip install -r backend/requirements.txt"
     startCommand: "python backend/app.py"
     plan: free
     envVars:
