@@ -1,3 +1,58 @@
-git add frontend/
-git commit -m "Add frontend scaffold"
-git push origin main
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    pre { background: #f4f4f4; padding: 1em; overflow-x: auto; }
+    textarea { width: 100%; height: 300px; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>📘 Chapter Viewer</h1>
+  <select id="chapterSelect"></select>
+  <textarea id="chapterContent" readonly></textarea>
+
+  <h2>📊 Matrix Viewer</h2>
+  <pre id="matrixOutput"></pre>
+
+  <script>
+    const baseURL = 'http://localhost:5000';
+
+    // Load chapter list
+    fetch(`${baseURL}/api/chapters`)
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById('chapterSelect');
+        data.chapters.forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          select.appendChild(opt);
+        });
+
+        select.addEventListener('change', () => {
+          fetch(`../chapters/${select.value}`)
+            .then(res => res.text())
+            .then(text => {
+              document.getElementById('chapterContent').value = text;
+            });
+        });
+
+        if (data.chapters.length > 0) {
+          select.value = data.chapters[0];
+          select.dispatchEvent(new Event('change'));
+        }
+      });
+
+    // Load matrix
+    fetch(`${baseURL}/api/matrix`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('matrixOutput').textContent =
+          JSON.stringify(data, null, 2);
+      });
+  </script>
+</body>
+</html>
